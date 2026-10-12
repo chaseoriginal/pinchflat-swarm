@@ -20,8 +20,8 @@ services:
       retries: 3
       start_period: 90s
     volumes:
-      - pinchflat.config:/config:rw
-      - /media/Multimedia/Incoming/pinchflat:/downloads:rw
+      - /var/lib/docker/volumes/pinchflat-swarm/config:/config
+      - /media/Multimedia/Incoming/pinchflat:/downloads
     ports:
       - target: 8945
         published: 8945
@@ -35,10 +35,6 @@ services:
           - node.labels.deployment.target.pinchflat == true
       restart_policy:
         condition: on-failure
-
-volumes:
-  pinchflat.config:
-    name: pinchflat-swarm.config
 
 networks:
   pinchflat-swarm_default:
