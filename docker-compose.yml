@@ -1,0 +1,46 @@
+x-base: &base
+  restart: unless-stopped
+  networks:
+    - pinchflat-swarm_default
+
+services:
+  pinchflat:
+    <<: *base
+    image: ghcr.io/kieraneglin/pinchflat:latest
+    container_name: ${CNAME}
+    user: ${PUID}:${PGID}
+    environment:
+      - TZ=${TZ}
+    security_opt:
+      - seccomp:unconfined
+    healthcheck:
+      test: timeout 10s bash -c ':> /dev/tcp/127.0.0.1/8945' || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 90s
+    volumes:
+      - pinchflat.config:/config:rw
+      - /media/Multimedia/Incoming/pinchflat:/downloads:rw
+    ports:
+      - target: 8945
+        published: 8945
+        protocol: tcp
+        mode: host
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.deployment.target.pinchflat == true
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  pinchflat.config:
+    name: pinchflat-swarm.config
+
+networks:
+  pinchflat-swarm_default:
+    external: true
+    name: pinchflat-swarm_default
