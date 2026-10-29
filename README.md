@@ -8,8 +8,8 @@ deployment and polls this repository for changes.
 | Portainer stack id | 12 |
 | Portainer host | ore-dock-110-1 |
 | Endpoint | - (id -) |
-| Swarm | iymtakl6ibno |
-| Live service | pinchflat-swarm_pinchflat |
+| Swarm | True |
+| Live service | svc:pinchflat-swarm_pinchflat |
 | Git repo | https://github.com/chaseoriginal/pinchflat-swarm |
 | Compose file | `docker-compose.yml` |
 | Auto-update poll | every 900s |
@@ -39,8 +39,8 @@ deployment and polls this repository for changes.
 ## Verifying a deployment
 
 ```bash
-docker service ls --filter name=pinchflat-swarm_pinchflat
-docker service inspect pinchflat-swarm_pinchflat --format '{{json .Spec.TaskTemplate.ContainerSpec.Mounts}}'
+docker service ls --filter name=svc:pinchflat-swarm_pinchflat
+docker service inspect svc:pinchflat-swarm_pinchflat --format '{{json .Spec.TaskTemplate.ContainerSpec.Mounts}}'
 ```
 
 A healthy stack shows `1/1` and the same volume names as before.
